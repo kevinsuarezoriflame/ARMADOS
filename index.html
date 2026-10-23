@@ -1,0 +1,2208 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Armados</title>
+<style>
+  :root{
+    --bg1:#f3fbfa;
+    --bg2:#eaf6f5;
+    --card:#ffffffcc;
+    --card2:#f7fffe;
+    --line:#c7e6e2;
+    --text:#0f2f2b;
+    --muted:#4a6b66;
+    --primary:#0b7469;
+    --primary2:#0a645b;
+    --danger:#d93c3c;
+    --shadow: 0 10px 30px rgba(0,0,0,.06);
+    --radius: 18px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+    color:var(--text);
+    background: radial-gradient(1200px 700px at 20% 10%, var(--bg2), var(--bg1));
+  }
+  .wrap{max-width:1120px; margin:28px auto 48px; padding:0 16px;}
+  .topbar{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px;}
+  .chip{
+    display:inline-flex; align-items:center; gap:10px;
+    background:#e7f6f3; border:1px solid var(--line); color:var(--primary);
+    padding:10px 14px; border-radius:999px; font-weight:700; letter-spacing:.5px;
+    text-transform:uppercase; font-size:12px;
+  }
+  h1{margin:6px 0 10px; font-size:46px; line-height:1.05; color:#1aa391; letter-spacing:-0.5px;}
+  .tabs{display:flex; gap:10px; flex-wrap:wrap; margin:14px 0 18px;}
+  .tab{
+    border:1px solid var(--line);
+    background:rgba(255,255,255,.55);
+    color:var(--text);
+    padding:10px 14px;
+    border-radius:999px;
+    cursor:pointer;
+    font-weight:700;
+    transition:.15s;
+    user-select:none;
+  }
+  .tab.active{background:#dff3f0; border-color:#a9ddd7;}
+  .grid{display:grid; gap:16px;}
+  .grid.two{grid-template-columns: 1.55fr .85fr;}
+  @media (max-width: 980px){ .grid.two{grid-template-columns:1fr} h1{font-size:38px} }
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .card .hd{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 16px;
+    background: linear-gradient(180deg, rgba(255,255,255,.65), rgba(255,255,255,.25));
+    border-bottom:1px solid var(--line);
+    gap:12px;
+  }
+  .hd .left{display:flex; align-items:center; gap:12px;}
+  .step{
+    width:34px; height:34px; border-radius:999px; display:grid; place-items:center;
+    border:1px solid var(--line); background:#eefbf9; color:var(--primary); font-weight:900;
+  }
+  .title{font-weight:900; letter-spacing:-.2px}
+  .pill{
+    border:1px solid var(--line);
+    background:#f1fbf9;
+    padding:8px 12px;
+    border-radius:999px;
+    font-weight:800;
+    color:var(--text);
+    font-size:13px;
+    white-space:nowrap;
+  }
+  .body{padding:14px 16px;}
+  .muted{color:var(--muted); font-weight:600}
+  table{width:100%; border-collapse:separate; border-spacing:0;}
+  thead th{
+    text-align:left; font-size:12px; color:var(--primary); letter-spacing:.6px; text-transform:uppercase;
+    padding:10px 10px; border-bottom:1px solid var(--line);
+    background:#f1fbf9;
+  }
+  tbody td{padding:10px; border-bottom:1px solid #e6f3f1; vertical-align:middle;}
+  tbody tr:hover td{background:#fbfffe;}
+  .code{font-weight:900; font-size:18px; letter-spacing:-.2px; white-space:nowrap;}
+  .desc{font-weight:700}
+  .qty{text-align:right; font-weight:900; font-size:18px; white-space:nowrap;}
+  .qty.small{font-size:16px}
+  .input{
+    width:90px; padding:9px 10px; border-radius:12px; border:1px solid var(--line);
+    background:#fff; font-weight:800; outline:none;
+  }
+  .input:focus{border-color:#7fd2c9; box-shadow:0 0 0 4px rgba(26,163,145,.12);}
+  .btns{display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap;}
+  .btn{
+    padding:10px 14px; border-radius:14px; border:1px solid var(--line);
+    background:#fff; font-weight:900; cursor:pointer; transition:.15s;
+  }
+  .btn.primary{background:var(--primary); border-color:transparent; color:white;}
+  .btn.primary:hover{background:var(--primary2)}
+  .btn.ghost{background:#fff;}
+  .btn.danger{background:#ffe9e9; border-color:#ffcaca; color:var(--danger);}
+  .btn.small{padding:8px 12px; border-radius:12px; font-size:13px;}
+  .stack{display:grid; gap:14px;}
+  textarea{
+    width:100%; min-height:170px; padding:12px 12px;
+    border-radius:16px; border:1px solid var(--line); background:#fff;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    font-weight:700; line-height:1.25; resize:vertical;
+  }
+  .kpiGrid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .kpi{
+    border:1px solid var(--line);
+    background:#f7fffe;
+    border-radius:16px;
+    padding:12px 12px;
+  }
+  .kpi .k{font-size:12px; text-transform:uppercase; letter-spacing:.7px; color:#5c7a75; font-weight:900;}
+  .kpi .v{font-size:26px; font-weight:1000; color:var(--primary); margin-top:4px;}
+  .subrow{display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap;}
+  .hint{font-size:12px; color:#5d7b76; font-weight:700}
+  .hidden{display:none !important;}
+  .badge{
+    display:inline-flex; align-items:center; gap:8px;
+    background:#f1fbf9; border:1px solid var(--line);
+    padding:6px 10px; border-radius:999px; font-weight:900; font-size:12px; color:#2b4d47;
+  }
+  .warn{
+    display:inline-flex; align-items:center; gap:8px;
+    background:#fff2e3; border:1px solid #ffd7aa;
+    padding:6px 10px; border-radius:999px; font-weight:900; font-size:12px; color:#7a4a11;
+  }
+  .rowInputs{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end}
+  .plWrap{display:grid; gap:6px; min-width:240px}
+  .plWrap input{width:100%}
+  .note{font-size:12px; color:#5d7b76; font-weight:800;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="chip">ORIFLAME - OPERACIONES</div>
+    <div class="chip" style="text-transform:none; letter-spacing:0">Armados</div>
+  </div>
+  <h1>Armados</h1>
+
+
+  <div class="tabs" id="mainTabs" style="margin-top:6px">
+    <div class="tab active" data-main="novage">Armado Novage</div>
+    <div class="tab" data-main="otros">Otros armados</div>
+  </div>
+  <div id="module-novage">
+
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-tab="base">1) Base + Stock</div>
+    <div class="tab" data-tab="pick">2) Picklist</div>
+    <div class="tab" data-tab="mov">3) Armado</div>
+  </div>
+
+  <!-- BASE + STOCK -->
+  <div class="grid two" id="tab-base">
+    <div class="stack">
+      <div class="card">
+        <div class="hd">
+          <div class="left">
+            <div class="step">1</div>
+            <div>
+              <div class="title">Catálogo de Sets (Fijo)</div>
+              <div class="hint">Ingresa cuántos sets vas a armar. Luego <b>Consolidar</b>.</div>
+            </div>
+          </div>
+          <div class="pill"><span id="setsCount">0</span> sets</div>
+        </div>
+        <div class="body">
+          <div style="overflow:auto; border-radius:16px; border:1px solid var(--line);">
+            <table id="setsTable">
+              <thead>
+                <tr>
+                  <th style="width:120px">Código</th>
+                  <th>Set</th>
+                  <th style="width:160px; text-align:right">Armar (QTY)</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <div class="subrow" style="margin-top:12px;">
+            <div class="note">Tip: si pones 0, ese set queda fuera. (Cero también cuenta como disciplina 🧘‍♂️)</div>
+            <div class="btns">
+              <button class="btn danger" id="btnClearSets">Limpiar</button>
+              <button class="btn primary" id="btnConsolidate">Consolidar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="hd">
+          <div class="left">
+            <div class="step">1</div>
+            <div>
+              <div class="title">Pegado de Stock (BULK)</div>
+              <div class="hint">Pega el reporte (Excel → copiar/pegar). Se detecta código, ubicación y cantidad.</div>
+            </div>
+          </div>
+          <div class="pill">Filas válidas: <span id="stockValid">0</span></div>
+        </div>
+        <div class="body">
+          <textarea id="stockPaste" placeholder="Ejemplo:
+14	46381	Bulk	01-30-041-05	1900
+..."></textarea>
+          <div class="subrow" style="margin-top:12px;">
+            <div class="note">Priorización: nivel 01 → 02 → 03…; luego “especiales”; al final PL (faltantes).</div>
+            <div class="btns">
+              <button class="btn danger" id="btnClearStock">Limpiar</button>
+              <button class="btn primary" id="btnLoadStock">Cargar stock</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="hd">
+        <div class="left">
+          <div class="step">1</div>
+          <div class="title">Resumen</div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="kpiGrid">
+          <div class="kpi"><div class="k">Sets seleccionados</div><div class="v" id="kpiSets">0</div></div>
+          <div class="kpi"><div class="k">Componentes únicos</div><div class="v" id="kpiComps">0</div></div>
+          <div class="kpi"><div class="k">Líneas (picklist)</div><div class="v" id="kpiLines">0</div></div>
+          <div class="kpi"><div class="k">Stock cargado</div><div class="v" id="kpiStock">0</div></div>
+        </div>
+        <div style="margin-top:14px;" class="note">
+          Si un componente no alcanza en una ubicación, se completa automáticamente con la siguiente ubicación disponible.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PICKLIST -->
+  <div class="grid hidden" id="tab-pick">
+    <div class="card">
+      <div class="hd">
+        <div class="left">
+          <div class="step">2</div>
+          <div>
+            <div class="title">Picklist (Consolidado)</div>
+            <div class="hint">Componentes únicos (sumados) según los sets a armar.</div>
+          </div>
+        </div>
+        <div class="pill">Sets: <span id="pickSets">0</span> | Componentes: <span id="pickComps">0</span></div>
+      </div>
+      <div class="body">
+        <div style="overflow:auto; border-radius:16px; border:1px solid var(--line);">
+          <table id="reqTable">
+            <thead>
+              <tr>
+                <th style="width:120px">Código</th>
+                <th>Descripción</th>
+                <th style="width:140px; text-align:right">Requerido</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div class="subrow" style="margin-top:12px;">
+          <div class="note">Cuando esté listo, asigna stock a ubicaciones (Bulk → especiales → PL).</div>
+          <div class="btns">
+            <button class="btn primary" id="btnAssign">Asignar BULK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="hd">
+        <div class="left">
+          <div class="step">2</div>
+          <div>
+            <div class="title">Recopilación (orden por “002”)</div>
+            <div class="hint">Orden: segmento “002” (menor→mayor), luego nivel. PL al final.</div>
+          </div>
+        </div>
+        <div class="rowInputs">
+          <label class="badge" style="gap:10px;">
+            <input type="checkbox" id="chkIncludePL" checked style="transform:scale(1.1)"/>
+            Incluir PL
+          </label>
+          <button class="btn primary small" id="btnCopyPick">Copiar</button>
+        </div>
+      </div>
+      <div class="body">
+        <div style="overflow:auto; border-radius:16px; border:1px solid var(--line); margin-bottom:12px;">
+          <table id="linesTable">
+            <thead>
+              <tr>
+                <th style="width:170px">Código</th>
+                <th style="width:190px">Ubicación</th>
+                <th style="width:150px">Puesto(s)</th>
+                <th style="width:120px; text-align:right">QTY</th>
+                <th>PL (editable)</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div class="badge" style="margin-bottom:8px;">Salida copiable (TSV)</div>
+        <textarea id="pickOut" readonly placeholder="Aquí aparecerá el TSV para pegar directo en tu sistema..."></textarea>
+        <div class="note" style="margin-top:8px;">
+          Formato: <b>Código</b> [TAB] <b>Ubicación</b> [TAB] <b>Puesto(s)</b> [TAB] <b>QTY</b>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARMADO -->
+  <div class="grid two hidden" id="tab-mov">
+    <div class="card">
+      <div class="hd">
+        <div class="left">
+          <div class="step">3</div>
+          <div>
+            <div class="title">Armado (Movimiento)</div>
+            <div class="hint">Componentes en negativo y códigos de set en positivo.</div>
+          </div>
+        </div>
+        <div class="rowInputs">
+          <button class="btn primary small" id="btnCopyMov">Copiar</button>
+          <button class="btn small" id="btnExportXls" title="Descarga Excel con hoja de trabajo y pivot por ubicación">Descargar Excel</button>
+          <div class="pill">Líneas: <span id="movLines">0</span></div>
+        </div>
+      </div>
+      <div class="body">
+        <div style="overflow:auto; border-radius:16px; border:1px solid var(--line);">
+          <table id="movTable">
+            <thead>
+              <tr>
+                <th style="width:120px">Código</th>
+                <th>Descripción</th>
+                <th style="width:140px; text-align:right">QTY</th>
+                <th style="width:90px">Tipo</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="note" style="margin-top:10px;">Copia solo: <b>código</b>, <b>nombre</b>, <b>qty</b>.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="hd">
+        <div class="left">
+          <div class="step">3</div>
+          <div class="title">Control</div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="kpiGrid">
+          <div class="kpi"><div class="k">Componentes</div><div class="v" id="kpiMovComp">0</div></div>
+          <div class="kpi"><div class="k">Sets</div><div class="v" id="kpiMovSets">0</div></div>
+          <div class="kpi"><div class="k">Total líneas</div><div class="v" id="kpiMovTotal">0</div></div>
+          <div class="kpi"><div class="k">QTY neto</div><div class="v" id="kpiMovNet">0</div></div>
+        </div>
+        <div class="note" style="margin-top:14px;">QTY neto debería ser positivo (entran sets) y negativo (salen componentes). Si no cuadra… sospecha del Excel, no del operador 😉</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="module-otros" class="hidden">
+
+  <div class="tabs" id="oTabs">
+    <div class="tab active" data-otab="base">1) Base</div>
+    <div class="tab" data-otab="stock">2) Stock bodega</div>
+    <div class="tab" data-otab="pick">3) Recopilación</div>
+    <div class="tab" data-otab="mov">4) Armado</div>
+  </div>
+
+  <div class="grid two" id="o-tab-base">
+    <div class="stack">
+      <div class="card">
+        <div class="hd">
+          <div class="left">
+            <div class="step">1</div>
+            <div>
+              <div class="title">Definición del armado</div>
+              <div class="hint">Ingresa el código del armado final, sus componentes y la cantidad a producir.</div>
+            </div>
+          </div>
+          <div class="pill">Manual / flexible</div>
+        </div>
+        <div class="body">
+          <div class="stack">
+            <div class="subrow">
+              <div style="flex:1; min-width:220px">
+                <div class="note" style="margin-bottom:6px;">Código del armado</div>
+                <input class="input" id="oSetCode" style="width:100%" placeholder="Ej: 900001"/>
+              </div>
+              <div style="flex:1; min-width:260px">
+                <div class="note" style="margin-bottom:6px;">Descripción del armado (opcional)</div>
+                <input class="input" id="oSetDesc" style="width:100%" placeholder="Ej: Set Promo XYZ"/>
+              </div>
+              <div style="width:160px">
+                <div class="note" style="margin-bottom:6px;">Cantidad a armar</div>
+                <input class="input" id="oSetQty" inputmode="numeric" style="width:100%" value="0"/>
+              </div>
+            </div>
+
+            <div>
+              <div class="note" style="margin-bottom:6px;">Componentes del armado</div>
+              <textarea id="oCompPaste" placeholder="Pega aquí los componentes.
+Formatos aceptados:
+Código[TAB]Descripción[TAB]Cantidad por armado
+41029	Novage+ Refresh Gel Cleanser	1
+803269	Caja Cartón NovAge	1"></textarea>
+            </div>
+
+            <div class="subrow">
+              <div class="note">La cantidad final requerida se calcula como: cantidad por armado × cantidad a armar.</div>
+              <div class="btns">
+                <button class="btn danger" id="oBtnClearBase">Limpiar</button>
+                <button class="btn primary" id="oBtnBuildReq">Procesar componentes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="hd">
+          <div class="left">
+            <div class="step">1</div>
+            <div>
+              <div class="title">Componentes detectados</div>
+              <div class="hint">Vista previa de la estructura del armado antes de recopilar.</div>
+            </div>
+          </div>
+          <div class="pill"><span id="oCompCount">0</span> componentes</div>
+        </div>
+        <div class="body">
+          <div style="overflow:auto; border-radius:16px; border:1px solid var(--line);">
+            <table id="oCompTable">
+              <thead>
+                <tr>
+                  <th style="width:120px">Código</th>
+                  <th>Descripción</th>
+                  <th style="width:150px; text-align:right">Qty por armado</th>
+                  <th style="width:160px; text-align:right">Qty requerido</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="hd">
+        <div class="left">
+          <div class="step">1</div>
+          <div class="title">Resumen</div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="kpiGrid">
+          <div class="kpi"><div class="k">Código armado</div><div class="v" id="oKpiSetCode">—</div></div>
+          <div class="kpi"><div class="k">Cantidad a armar</div><div class="v" id="oKpiSetQty">0</div></div>
+          <div class="kpi"><div class="k">Componentes</div><div class="v" id="oKpiComp">0</div></div>
+          <div class="kpi"><div class="k">Líneas recop.</div><div class="v" id="oKpiLines">0</div></div>
+        </div>
+        <div style="margin-top:14px;" class="note">Esta pestaña sirve para cualquier armado fuera del catálogo Novage. Más libre, menos drama.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid two hidden" id="o-tab-stock">
+    <div class="card">
+      <div class="hd">
+        <div class="left">
+          <div class="step">2</div>
+          <div>
+            <div class="title">Stock de bodega</div>
+            <div class="hint">Pega el stock con la misma lógica del módulo Novage. Se respetan ubicaciones y faltantes a PL.</div>
+          </div>
+        </div>
+        <div class="pill">Filas válidas: <span id="oStockValid">0</span></div>
+      </div>
+      <div class="body">
+        <textarea id="oStockPaste" placeholder="Ejemplo:
+Bodega	Variante	Zona	Ubicación	Caja	Physical Quantity
+14	41029	Bulk	01-30-041-05		1900"></textarea>
+        <div class="subrow" style="margin-top:12px;">
+          <div class="note">Orden operativo: ubicación normal primero, especiales después y PL al final como faltante.</div>
+          <div class="btns">
+            <button class="btn danger" id="oBtnClearStock">Limpiar</button>
+            <button class="btn primary" id="oBtnLoadStock">Cargar stock</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="hd">
+        <div class="left">
+          <div class="step">2</div>
+          <div class="title">Control stock</div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="kpiGrid">
+          <div class="kpi"><div class="k">Filas stock</div><div class="v" id="oKpiStockRows">0</div></div>
+          <div class="kpi"><div class="k">Componentes con stock</div><div class="v" id="oKpiStockCodes">0</div></div>
+        </div>
+        <div style="margin-top:14px;" class="note">Si una ubicación no alcanza, la recopilación seguirá con la siguiente. Sin sentimentalismos, puro flujo operativo.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid hidden" id="o-tab-pick">
+    <div class="card">
+      <div class="hd">
+        <div class="left">
+          <div class="step">3</div>
+          <div>
+            <div class="title">Recopilación (Otros armados)</div>
+            <div class="hint">Se toma stock por ubicaciones y, si no alcanza, se continúa en la siguiente. PL se deja al final.</div>
+          </div>
+        </div>
+        <div class="rowInputs">
+          <label class="badge" style="gap:10px;">
+            <input type="checkbox" id="oChkIncludePL" checked style="transform:scale(1.1)"/>
+            Incluir PL
+          </label>
+          <button class="btn primary small" id="oBtnGeneratePick">Generar</button>
+          <button class="btn primary small" id="oBtnCopyPick">Copiar</button>
+        </div>
+      </div>
+      <div class="body">
+        <div style="overflow:auto; border-radius:16px; border:1px solid var(--line); margin-bottom:12px;">
+          <table id="oLinesTable">
+            <thead>
+              <tr>
+                <th style="width:170px">Código</th>
+                <th style="width:190px">Ubicación</th>
+                <th style="width:150px">Puesto(s)</th>
+                <th style="width:120px; text-align:right">QTY</th>
+                <th>PL (editable)</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div class="badge" style="margin-bottom:8px;">Salida copiable (TSV)</div>
+        <textarea id="oPickOut" readonly placeholder="Aquí aparecerá la recopilación para copiar..."></textarea>
+        <div class="note" style="margin-top:8px;">Formato: <b>Código</b> [TAB] <b>Ubicación</b> [TAB] <b>Puesto(s)</b> [TAB] <b>QTY</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid two hidden" id="o-tab-mov">
+    <div class="card">
+      <div class="hd">
+        <div class="left">
+          <div class="step">4</div>
+          <div>
+            <div class="title">Armado (Movimiento)</div>
+            <div class="hint">Componentes en negativo y armado final en positivo.</div>
+          </div>
+        </div>
+        <div class="rowInputs">
+          <button class="btn primary small" id="oBtnCopyMov">Copiar</button>
+          <button class="btn small" id="oBtnExportXls">Descargar Excel</button>
+          <div class="pill">Líneas: <span id="oMovLines">0</span></div>
+        </div>
+      </div>
+      <div class="body">
+        <div style="overflow:auto; border-radius:16px; border:1px solid var(--line);">
+          <table id="oMovTable">
+            <thead>
+              <tr>
+                <th style="width:120px">Código</th>
+                <th>Descripción</th>
+                <th style="width:140px; text-align:right">QTY</th>
+                <th style="width:90px">Tipo</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="note" style="margin-top:10px;">Excel normal offline, sin dependencias externas.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="hd">
+        <div class="left">
+          <div class="step">4</div>
+          <div class="title">Control</div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="kpiGrid">
+          <div class="kpi"><div class="k">Componentes</div><div class="v" id="oKpiMovComp">0</div></div>
+          <div class="kpi"><div class="k">Armados</div><div class="v" id="oKpiMovSet">0</div></div>
+          <div class="kpi"><div class="k">Total líneas</div><div class="v" id="oKpiMovTotal">0</div></div>
+          <div class="kpi"><div class="k">QTY neto</div><div class="v" id="oKpiMovNet">0</div></div>
+        </div>
+        <div style="margin-top:14px;" class="note">La lógica operativa quedó correcta: componentes salen, armado entra.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/** Datos embebidos desde Excel (TODOS + pestañas por set) **/
+const SETS_DATA = [{"code": 43691, "name": "Novage+ Lift + Firm Routine Rich", "components": [{"code": 41029, "desc": "Novage+ Refresh Gel Cleanser", "qty": 1}, {"code": 41058, "desc": "Novage+ Multi-Active Anti-Ageing Night Cream Rich", "qty": 1}, {"code": 41048, "desc": "Novage+ Multi-Active Anti-Ageing Day Cream Rich SPF 30", "qty": 1}, {"code": 41037, "desc": "Novage+ Lift + Firm Serum", "qty": 1}, {"code": 42425, "desc": "Novage+ Lift + Firm Eye Cream", "qty": 1}, {"code": 803494, "desc": "Etiqueta Caja Lift+Firm Rich", "qty": 1}, {"code": 803269, "desc": "Caja Cartón NovAge", "qty": 1}, {"code": 803457, "desc": "Banco largo", "qty": 1}, {"code": 803266, "desc": "Triptico Novage Lifting", "qty": 1}]}, {"code": 43695, "name": "Novage+ Wrinkle Smooth Routine Rich", "components": [{"code": 41029, "desc": "Novage+ Refresh Gel Cleanser", "qty": 1}, {"code": 41034, "desc": "Novage+ Wrinkle Smooth Eye Cream", "qty": 1}, {"code": 41035, "desc": "Novage+ Wrinkle Smooth Serum", "qty": 1}, {"code": 41048, "desc": "Novage+ Multi-Active Anti-Ageing Day Cream Rich SPF 30", "qty": 1}, {"code": 41058, "desc": "Novage+ Multi-Active Anti-Ageing Night Cream Rich", "qty": 1}, {"code": 803262, "desc": "Triptico Novage Wrinkle", "qty": 1}, {"code": 803269, "desc": "Caja Cartón NovAge", "qty": 1}, {"code": 803457, "desc": "Banco largo", "qty": 1}, {"code": 803491, "desc": "Etiqueta Caja Wrinkle  Smooth Rich", "qty": 1}]}, {"code": 45590, "name": "Novage+ Wrinkle Smooth Routine Mixed", "components": [{"code": 41029, "desc": "Novage+ Refresh Gel Cleanser", "qty": 1}, {"code": 41034, "desc": "Novage+ Wrinkle Smooth Eye Cream", "qty": 1}, {"code": 41035, "desc": "Novage+ Wrinkle Smooth Serum", "qty": 1}, {"code": 41044, "desc": "Novage+ Multi-Active Anti-Ageing Day Cream Light SPF 30", "qty": 1}, {"code": 41058, "desc": "Novage+ Multi-Active Anti-Ageing Night Cream Rich", "qty": 1}, {"code": 803262, "desc": "Triptico Novage Wrinkle", "qty": 1}, {"code": 803269, "desc": "Caja Cartón NovAge", "qty": 1}, {"code": 803456, "desc": "Banco corto", "qty": 1}, {"code": 803490, "desc": "Etiqueta Caja Wrinkle  Smooth Mixed", "qty": 1}]}, {"code": 45591, "name": "Novage+ Wrinkle Smooth Routine Light", "components": [{"code": 41029, "desc": "Novage+ Refresh Gel Cleanser", "qty": 1}, {"code": 41034, "desc": "Novage+ Wrinkle Smooth Eye Cream", "qty": 1}, {"code": 41035, "desc": "Novage+ Wrinkle Smooth Serum", "qty": 1}, {"code": 41044, "desc": "Novage+ Multi-Active Anti-Ageing Day Cream Light SPF 30", "qty": 1}, {"code": 41057, "desc": "Novage+ Multi-Active Anti-Ageing Night Cream Light", "qty": 1}, {"code": 803262, "desc": "Triptico Novage Wrinkle", "qty": 1}, {"code": 803269, "desc": "Caja Cartón NovAge", "qty": 1}, {"code": 803456, "desc": "Banco corto", "qty": 1}, {"code": 803492, "desc": "Etiqueta Caja Wrinkle  Smooth Light", "qty": 1}]}, {"code": 45592, "name": "Novage+ Lift + Firm Routine Light", "components": [{"code": 41029, "desc": "Novage+ Refresh Gel Cleanser", "qty": 1}, {"code": 41037, "desc": "Novage+ Lift + Firm Serum", "qty": 1}, {"code": 41044, "desc": "Novage+ Multi-Active Anti-Ageing Day Cream Light SPF 30", "qty": 1}, {"code": 41057, "desc": "Novage+ Multi-Active Anti-Ageing Night Cream Light", "qty": 1}, {"code": 42425, "desc": "Novage+ Lift + Firm Eye Cream", "qty": 1}, {"code": 803266, "desc": "Triptico Novage Lifting", "qty": 1}, {"code": 803269, "desc": "Caja Cartón NovAge", "qty": 1}, {"code": 803456, "desc": "Banco corto", "qty": 1}, {"code": 803495, "desc": "Etiqueta Caja Lift+Firm Light", "qty": 1}]}, {"code": 45595, "name": "Novage+ Bright Intense Routine Mixed", "components": [{"code": 41029, "desc": "Novage+ Refresh Gel Cleanser", "qty": 1}, {"code": 41033, "desc": "Novage+ Bright Intense Eye Cream", "qty": 1}, {"code": 41040, "desc": "Novage+ Bright Intense Serum", "qty": 1}, {"code": 41044, "desc": "Novage+ Multi-Active Anti-Ageing Day Cream Light SPF 30", "qty": 1}, {"code": 41058, "desc": "Novage+ Multi-Active Anti-Ageing Night Cream Rich", "qty": 1}, {"code": 803268, "desc": "Triptico Novage Brightening", "qty": 1}, {"code": 803269, "desc": "Caja Cartón NovAge", "qty": 1}, {"code": 803456, "desc": "Banco corto", "qty": 1}, {"code": 803496, "desc": "Etiqueta Caja Bright Intense Mixed", "qty": 1}]}, {"code": 45608, "name": "Novage+ Blemish + Age Defy Routine Light", "components": [{"code": 41029, "desc": "Novage+ Refresh Gel Cleanser", "qty": 1}, {"code": 41034, "desc": "Novage+ Wrinkle Smooth Eye Cream", "qty": 1}, {"code": 41039, "desc": "Novage+ Blemish + Age Defy Serum", "qty": 1}, {"code": 41044, "desc": "Novage+ Multi-Active Anti-Ageing Day Cream Light SPF 30", "qty": 1}, {"code": 41057, "desc": "Novage+ Multi-Active Anti-Ageing Night Cream Light", "qty": 1}, {"code": 803264, "desc": "Triptico Novage Adult Acne", "qty": 1}, {"code": 803269, "desc": "Caja Cartón NovAge", "qty": 1}, {"code": 803456, "desc": "Banco corto", "qty": 1}, {"code": 803493, "desc": "Etiqueta Caja Blemish + Age Defy Light", "qty": 1}]}, {"code": 45923, "name": "Novage+ Restore Set", "components": [{"code": 41029, "desc": "Novage+ Refresh Gel Cleanser", "qty": 1}, {"code": 41070, "desc": "Novage+ Restore Renewing Eye & Lip Contour Cream", "qty": 1}, {"code": 41075, "desc": "Novage+ Restore Renewing Face Serum", "qty": 1}, {"code": 44098, "desc": "Novage+ Restore Multi-Correcting Day Cream SPF 30", "qty": 1}, {"code": 44285, "desc": "Novage+ Restore Multi-Recover Night Cream", "qty": 1}, {"code": 803269, "desc": "Caja Cartón NovAge", "qty": 1}, {"code": 803457, "desc": "Banco largo", "qty": 1}, {"code": 803715, "desc": "Tríptico Novage+ Restore", "qty": 1}, {"code": 803716, "desc": "Etiqueta Caja Novage+ Restore", "qty": 1}]}];
+
+const SPECIAL_PUESTOS = new Set([
+  "Aereos_CW","Armados_CW","Bulk_CW1","Bulk_CW2","Bulk_CW3","Bulk_CW4","Bulk_CW5","Bulk_CW6",
+  "Compra Local","Inb_PL-CW","Inb_PL_CW","Inb_PL-CW ","Inb_PL_CW "
+]);
+
+function el(id){ return document.getElementById(id); }
+function fmt(n){ return new Intl.NumberFormat('es-EC').format(n||0); }
+function clampInt(x){ const v=parseInt(String(x).replace(/[^0-9-]/g,''),10); return isNaN(v)?0:v; }
+
+/** Estado **/
+const state = {
+  setQty: new Map(),           // setCode -> qty
+  required: new Map(),         // compCode -> {code, desc, qty}
+  stockByCode: new Map(),      // compCode -> [{code, loc, puesto, qty, seg, level, specialPuesto, specialLoc}]
+  lines: [],                   // pick lines after assignment
+  plEdits: new Map(),          // key (code|idx) -> {plLoc, plComment}
+};
+
+function setTab(tab) {
+  for (const t of document.querySelectorAll('.tab')) {
+    t.classList.toggle('active', t.dataset.tab===tab);
+  }
+  el('tab-base').classList.toggle('hidden', tab!=='base');
+  el('tab-pick').classList.toggle('hidden', tab!=='pick');
+  el('tab-mov').classList.toggle('hidden', tab!=='mov');
+  // refresh screens
+  if (tab==='pick') {
+    renderRequired();
+    renderLines();
+    buildPickOut();
+  }
+  if (tab==='mov') {
+    renderMov();
+  }
+}
+
+el('tabs').addEventListener('click', (e)=>{
+  const t = e.target.closest('.tab');
+  if (!t) return;
+  setTab(t.dataset.tab);
+});
+
+/** ====== 1) Sets ====== **/
+function buildSetsTable() {
+  el('setsCount').textContent = String(SETS_DATA.length);
+  const tbody = el('setsTable').querySelector('tbody');
+  tbody.innerHTML = '';
+  for (const s of SETS_DATA) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="code">${s.code}</td>
+      <td class="desc">${escapeHtml(s.name)}</td>
+      <td style="text-align:right">
+        <input class="input" inputmode="numeric" value="0" data-set="${s.code}" />
+      </td>
+    `;
+    tbody.appendChild(tr);
+  }
+  tbody.querySelectorAll('input[data-set]').forEach(inp=>{
+    inp.addEventListener('input', ()=>{
+      const code = parseInt(inp.dataset.set,10);
+      const q = Math.max(0, clampInt(inp.value));
+      state.setQty.set(code, q);
+      updateBaseKPIs();
+    });
+  });
+}
+
+function clearSets() {
+  state.setQty.clear();
+  el('setsTable').querySelectorAll('input[data-set]').forEach(inp=>inp.value='0');
+  consolidate(); // keeps required cleared too
+}
+
+el('btnClearSets').addEventListener('click', clearSets);
+
+function consolidate() {
+  // rebuild required
+  state.required.clear();
+  let selectedSets = 0;
+  for (const s of SETS_DATA) {
+    const q = state.setQty.get(s.code) || 0;
+    if (q<=0) continue;
+    selectedSets++;
+    for (const c of s.components) {
+      const cc = parseInt(c.code,10);
+      const add = (parseInt(c.qty,10) || 0) * q;
+      if (add<=0) continue;
+      if (!state.required.has(cc)) {
+        state.required.set(cc, {code:cc, desc:c.desc||'', qty:add});
+      } else {
+        state.required.get(cc).qty += add;
+      }
+    }
+  }
+  updateBaseKPIs();
+  // update pick tab counters
+  el('pickSets').textContent = String(selectedSets);
+  el('pickComps').textContent = String(state.required.size);
+  // render for pick tab if currently there
+  renderRequired();
+  renderMov(); // so armado is ready too
+}
+
+el('btnConsolidate').addEventListener('click', consolidate);
+
+/** ====== 1) Stock ====== **/
+function parseStockPaste() {
+  const raw = (el('stockPaste').value || '').replace(/\r/g, '').trim();
+  if (!raw) return [];
+
+  // Helpers (tolerantes a Excel: tabs, columnas vacías, encabezados, separadores raros)
+  const normalizeHeader = (s) => (s || '')
+    .toString()
+    .trim()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/\s+/g, ' ');
+  const tokenizeRow = (line)=>{
+    const raw = String(line||'').replace(/\u00a0/g,' ').replace(/\r/g,'');
+    if (!raw.trim()) return [];
+    const l = raw.trimEnd();
+
+    // Prefer delimiter-aware splits that preserve empty columns (e.g., blank "Caja")
+    if (l.includes('\t')) return l.split('\t').map(c=>c.trim());
+    if (l.includes(';') && l.split(';').length >= 3) return l.split(';').map(c=>c.trim());
+    if (l.includes(',') && l.split(',').length >= 5) return l.split(',').map(c=>c.trim());
+
+    // Many exports arrive space-aligned. Try 2+ spaces first; if it yields too few cols, fall back to 1+ spaces.
+    let parts = l.trim().split(/\s{2,}/).map(c=>c.trim());
+    if (parts.length <= 2) parts = l.trim().split(/\s+/).map(c=>c.trim());
+    return parts;
+  };
+
+  const parseQtySmart = (v) => {
+    if (v === null || v === undefined) return null;
+    let s = String(v).replace(/\u00A0/g, ' ').trim();
+    if (!s) return null;
+
+    // deja solo dígitos, separadores y signo
+    s = s.replace(/[^\d.,-]/g, '');
+    if (!s) return null;
+
+    const hasDot = s.includes('.');
+    const hasComma = s.includes(',');
+
+    if (hasDot && hasComma) {
+      // el separador decimal suele ser el último que aparezca
+      const lastDot = s.lastIndexOf('.');
+      const lastComma = s.lastIndexOf(',');
+      if (lastComma > lastDot) s = s.replace(/\./g, '').replace(/,/g, '.'); // coma decimal
+      else s = s.replace(/,/g, ''); // punto decimal
+    } else if (hasComma && !hasDot) {
+      if (/^-?\d{1,3}(,\d{3})+$/.test(s)) s = s.replace(/,/g, '');
+      else s = s.replace(/,/g, '.');
+    } else if (hasDot && !hasComma) {
+      if (/^-?\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, '');
+    }
+
+    const n = Number(s);
+    if (!Number.isFinite(n)) return null;
+    return n;
+  };
+
+  const lines = raw.split('\n').map(l => l.trimEnd()).filter(l => l.trim().length);
+  if (!lines.length) return [];
+
+  // Detecta encabezados (Bodega / Variante / Zona / Ubicación / ... / Physical Quantity)
+  
+  let header = null;
+  let startIdx = 0;
+
+  const isHeaderRow = (normCols)=>{
+    const hasLoc = normCols.some(h => h==='ubicacion' || h==='locacion' || h.includes('ubicacion') || h.includes('ubic') || h==='location' || h.includes('location'));
+    const hasQty = normCols.some(h => h.includes('quantity') || h.includes('qty') || h.includes('cantidad') || h.includes('cant'));
+    const hasCode = normCols.some(h => h==='variante' || h==='codigo' || h==='prod_code' || h==='sku' || h.includes('variante') || h.includes('codigo'));
+    const hasBodega = normCols.some(h => h.includes('bodega'));
+    return hasLoc && hasQty && (hasCode || hasBodega);
+  };
+
+  let headerRowIdx = -1;
+  let headerNorm = null;
+
+  for (let j=0; j<Math.min(lines.length, 15); j++){
+    const colsRaw = tokenizeRow(lines[j]);
+    if (colsRaw.length < 3) continue;
+    const normCols = colsRaw.map(normalizeHeader);
+    if (isHeaderRow(normCols)){
+      headerRowIdx = j;
+      headerNorm = normCols;
+      break;
+    }
+  }
+
+  if (headerRowIdx >= 0 && headerNorm){
+    header = { code: -1, loc: -1, qty: -1, zone: -1 };
+    headerNorm.forEach((h, idx)=>{
+      if (header.code < 0 && (h==='variante' || h==='codigo' || h==='prod_code' || h==='sku')) header.code = idx;
+      if (header.loc < 0 && (h==='ubicacion' || h==='locacion' || h==='location' || h.includes('ubic') || h.includes('loca'))) header.loc = idx;
+      if (header.qty < 0 && (h==='physical quantity' || h.includes('quantity') || h.includes('qty') || h==='cantidad' || h.includes('cant'))) header.qty = idx;
+      if (header.zone < 0 && (h==='zona' || h==='zone')) header.zone = idx;
+    });
+    startIdx = headerRowIdx + 1;
+  }
+
+  const normCell = (v)=> (v??'').toString()
+      .replace(/\u00a0/g,' ')
+      .replace(/[\u2010\u2011\u2012\u2013\u2212]/g,'-')
+      .replace(/\s*-\s*/g,'-')
+      .trim();
+
+const rows = [];
+
+  for (let i = startIdx; i < lines.length; i++) {
+    const rawLine = (lines[i] || '').trim();
+    if (!rawLine) continue;
+
+    const cells = tokenizeRow(rawLine).map(normCell);
+    if (!cells.length) continue;
+
+    let code = null;
+    let loc = null;
+    let qty = null;
+    let zoneFound = '';
+
+    if (header) {
+      const cCode = cells[header.code] ?? '';
+      const cLoc  = cells[header.loc]  ?? '';
+      const cQty  = cells[header.qty]  ?? '';
+      const cZone = header.zone >= 0 ? (cells[header.zone] ?? '') : '';
+      zoneFound = String(cZone || '').trim();
+
+      const mCode = String(cCode || '').match(/(\d{4,9})/);
+      if (mCode) code = mCode[1];
+
+      const mLoc = String(cLoc || '').match(/(\d{2}-\d{2}-\d{3}-\d{2})/);
+      if (mLoc) loc = mLoc[1];
+
+      if (!loc) {
+        for (const sp of SPECIAL_PUESTOS) {
+          if (String(cLoc).includes(sp) || rawLine.includes(sp)) { loc = sp; break; }
+        }
+      }
+
+      qty = parseQtySmart(cQty);
+    }
+
+    // Fallbacks (si viene sin headers o con columnas raras)
+    if (!Number.isFinite(qty)) qty = parseQtySmart(cells[cells.length - 1]);
+    if (!Number.isFinite(qty)) {
+      const mLast = rawLine.replace(/,/g, '').match(/(-?\d+(?:\.\d+)?)\s*$/);
+      if (mLast) qty = Number(mLast[1]);
+    }
+    if (!Number.isFinite(qty) || qty === 0) continue;
+
+    if (!code) {
+      if (cells.length >= 2 && /^\d{4,9}$/.test(cells[1])) code = cells[1]; // típico: Bodega, Variante, ...
+      else {
+        for (const c of cells) {
+          const m = String(c).match(/(^|[^\d])(\d{4,9})(?!\d)/);
+          if (m) { code = m[2]; break; }
+        }
+      }
+    }
+    if (!code) continue;
+
+    if (!loc) {
+      for (const c of cells) {
+        const m = String(c).match(/(\d{2}-\d{2}-\d{3}-\d{2})/);
+        if (m) { loc = m[1]; break; }
+      }
+    }
+    if (!loc) {
+      for (const sp of SPECIAL_PUESTOS) {
+        if (rawLine.includes(sp)) { loc = sp; break; }
+      }
+    }
+    if (!loc) continue;
+
+    // Zona (Bulk / PL) si viene
+    if (!zoneFound) {
+      for (const p of cells) {
+        if (/^bulk$/i.test(p)) { zoneFound = 'Bulk'; break; }
+        if (/^pl$/i.test(p)) { zoneFound = 'PL'; break; }
+      }
+    }
+
+    const isNumericLoc = /^\d{2}-\d{2}-\d{3}-\d{2}$/.test(loc);
+    let seg = '', level = '';
+
+    if (isNumericLoc) {
+      const partsLoc = loc.split('-');
+      seg = partsLoc[2] || '';
+      level = partsLoc[3] || '';
+    }
+
+    // Mantener la semántica original del HTML (puesto y flags)
+    let puestoFound = 'Bulk';
+
+    if (!isNumericLoc) {
+      // Ubicaciones especiales (se consideran "puesto" propio)
+      if (SPECIAL_PUESTOS.has(loc)) puestoFound = loc;
+      else if (loc.includes('Armados_') || loc === 'Armados_CW') puestoFound = 'Armados_CW';
+      else if (loc.includes('Aereos_') || loc === 'Aereos_CW') puestoFound = 'Aereos_CW';
+      else if (loc.includes('Rework_') || loc === 'Rework_CW') puestoFound = 'Rework_CW';
+      else if (loc.includes('Donaciones')) puestoFound = 'Donaciones';
+      else if (loc.includes('Destruccion')) puestoFound = 'Destruccion';
+      else if (loc.includes('Compra Local')) puestoFound = 'Compra Local';
+      else puestoFound = loc;
+    } else if (zoneFound && /^pl$/i.test(zoneFound)) {
+      puestoFound = 'PL';
+    }
+
+    const specialLoc = (!isNumericLoc) || SPECIAL_PUESTOS.has(loc);
+    const specialPuesto = !!puestoFound && puestoFound !== 'Bulk' && puestoFound !== 'Armados_CW';
+
+    rows.push({
+      code: Number(code),
+      loc,
+      puesto: puestoFound,
+      qty: Math.round(qty),
+      seg,
+      level,
+      specialLoc,
+      specialPuesto
+    });
+  }
+
+  return rows;
+}
+
+function loadStock() {
+  const rows = parseStockPaste();
+  state.stockByCode.clear();
+  for (const r of rows) {
+    if (!state.stockByCode.has(r.code)) state.stockByCode.set(r.code, []);
+    state.stockByCode.get(r.code).push(r);
+  }
+  // sort per code: normal loc first, then specials; within normal: level asc, then seg asc
+  for (const [code, arr] of state.stockByCode.entries()) {
+    arr.sort((a,b)=>{
+      const aCat = (a.specialLoc?2:(a.specialPuesto?1:0));
+      const bCat = (b.specialLoc?2:(b.specialPuesto?1:0));
+      if (aCat!==bCat) return aCat-bCat;
+      if (a.level!==b.level) return a.level-b.level;
+      if (a.seg!==b.seg) return a.seg-b.seg;
+      return 0;
+    });
+  }
+  el('stockValid').textContent = fmt(rows.length);
+  updateBaseKPIs();
+}
+
+el('btnLoadStock').addEventListener('click', loadStock);
+
+// Auto-detección al pegar/escribir (evita el “filas válidas: 0” por no presionar el botón)
+let _stockAutoTimer = null;
+el('stockPaste').addEventListener('input', ()=>{
+  if (_stockAutoTimer) clearTimeout(_stockAutoTimer);
+  _stockAutoTimer = setTimeout(()=>{ try { loadStock(); } catch(e){} }, 250);
+});
+el('btnClearStock').addEventListener('click', ()=>{
+  el('stockPaste').value='';
+  state.stockByCode.clear();
+  el('stockValid').textContent='0';
+  updateBaseKPIs();
+});
+
+/** ====== Base KPIs ====== **/
+function updateBaseKPIs() {
+  let setsSel = 0;
+  for (const q of state.setQty.values()) if ((q||0)>0) setsSel++;
+  el('kpiSets').textContent = fmt(setsSel);
+  el('kpiComps').textContent = fmt(state.required.size);
+  el('kpiStock').textContent = fmt(sumStockRows());
+  el('kpiLines').textContent = fmt(state.lines.length);
+
+  // also update pick header counters (safe)
+  el('pickSets').textContent = String(setsSel);
+  el('pickComps').textContent = String(state.required.size);
+}
+function sumStockRows() {
+  let n=0;
+  for (const arr of state.stockByCode.values()) n += arr.length;
+  return n;
+}
+
+/** ====== 2) Picklist ====== **/
+function renderRequired() {
+  const tbody = el('reqTable').querySelector('tbody');
+  tbody.innerHTML='';
+  const list = Array.from(state.required.values()).sort((a,b)=>a.code-b.code);
+  for (const r of list) {
+    const tr=document.createElement('tr');
+    tr.innerHTML = `
+      <td class="code">${r.code}</td>
+      <td class="desc">${escapeHtml(r.desc||'')}</td>
+      <td class="qty">${fmt(r.qty)}</td>
+    `;
+    tbody.appendChild(tr);
+  }
+}
+
+function assignBulk() {
+  state.lines = [];
+  state.plEdits.clear();
+
+  // for each required component allocate across locations
+  for (const r of Array.from(state.required.values()).sort((a,b)=>a.code-b.code)) {
+    let remaining = r.qty;
+    const stock = (state.stockByCode.get(r.code) || []).map(x=>({...x})); // clone
+    let idx=0;
+
+    // allocate in order
+    for (const s of stock) {
+      if (remaining<=0) break;
+      const take = Math.min(s.qty, remaining);
+      if (take<=0) continue;
+      remaining -= take;
+
+      // Puesto(s) = destino de armado. Aunque el stock venga de ubicaciones "especiales"
+      // (Bulk_CW*, Aereos_CW, Compra Local, etc.), el destino operativo sigue siendo Armados_CW.
+      const outPuesto = 'Armados_CW';
+      state.lines.push({
+        code: r.code,
+        desc: r.desc||'',
+        loc: s.loc,
+        puesto: outPuesto,
+        qty: take,
+        seg: s.seg,
+        level: s.level,
+        isPL:false,
+        plLoc:'',
+        plComment:''
+      });
+      idx++;
+    }
+
+    if (remaining>0) {
+      // PL shortage line
+      state.lines.push({
+        code: r.code,
+        desc: r.desc||'',
+        loc: '',
+        puesto: 'Armados_CW',
+        qty: remaining,
+        seg: 9999,
+        level: 99,
+        isPL:true,
+        plLoc:'',
+        plComment:''
+      });
+    }
+  }
+
+  // sort output lines for picking: by seg asc then level asc, but keep PL at end.
+  state.lines.sort((a,b)=>{
+    const aPL=a.isPL?1:0, bPL=b.isPL?1:0;
+    if (aPL!==bPL) return aPL-bPL;
+    if (a.seg!==b.seg) return a.seg-b.seg;
+    if (a.level!==b.level) return a.level-b.level;
+    return a.code-b.code;
+  });
+
+  renderLines();
+  buildPickOut();
+  updateBaseKPIs();
+}
+
+el('btnAssign').addEventListener('click', assignBulk);
+
+function renderLines() {
+  const tbody = el('linesTable').querySelector('tbody');
+  tbody.innerHTML='';
+
+  const includePL = el('chkIncludePL').checked;
+  const visible = state.lines.filter(l=> includePL ? true : !l.isPL);
+
+  for (let i=0;i<visible.length;i++) {
+    const l = visible[i];
+    const tr = document.createElement('tr');
+
+    const codeCell = l.isPL
+      ? `<div class="code">${l.code} <span class="warn">PL</span></div>`
+      : `<div class="code">${l.code}</div>`;
+
+    const locCell = l.isPL
+      ? `<span class="muted">—</span>`
+      : `<span class="desc">${escapeHtml(l.loc||'')}</span>`;
+
+    const plCell = l.isPL
+      ? `<div class="plWrap">
+           <input class="input" style="width:100%" placeholder="Ubicación PL..." data-pl="loc" data-i="${i}" value="${escapeAttr(l.plLoc||'')}"/>
+           <input class="input" style="width:100%" placeholder="Comentario..." data-pl="cmt" data-i="${i}" value="${escapeAttr(l.plComment||'')}"/>
+         </div>`
+      : `<span class="muted">—</span>`;
+
+    tr.innerHTML = `
+      <td>${codeCell}</td>
+      <td>${locCell}</td>
+      <td class="desc">${escapeHtml(l.puesto)}</td>
+      <td class="qty small">${fmt(l.qty)}</td>
+      <td>${plCell}</td>
+    `;
+    tbody.appendChild(tr);
+  }
+
+  // bind PL inputs
+  tbody.querySelectorAll('input[data-pl]').forEach(inp=>{
+    inp.addEventListener('input', ()=>{
+      const rowIndex = parseInt(inp.dataset.i,10);
+      const key = inp.dataset.pl;
+      const includePL = el('chkIncludePL').checked;
+      const visible = state.lines.filter(l=> includePL ? true : !l.isPL);
+      const line = visible[rowIndex];
+      if (!line || !line.isPL) return;
+      if (key==='loc') line.plLoc = inp.value.trim();
+      if (key==='cmt') line.plComment = inp.value.trim();
+      buildPickOut();
+    });
+  });
+
+}
+
+el('chkIncludePL').addEventListener('change', ()=>{ renderLines(); buildPickOut(); });
+
+function buildPickOut() {
+  const includePL = el('chkIncludePL').checked;
+  const visible = state.lines.filter(l=> includePL ? true : !l.isPL);
+
+  const lines = visible.map(l=>{
+    const loc = l.isPL ? (l.plLoc||'') : (l.loc||'');
+    return [l.code, loc, l.puesto, l.qty].join('\t');
+  });
+  el('pickOut').value = lines.join('\n');
+  el('kpiLines').textContent = fmt(visible.length);
+}
+
+function copyText(text) {
+  if (!text) return;
+  navigator.clipboard.writeText(text).catch(()=>{
+    // fallback
+    const ta=document.createElement('textarea');
+    ta.value=text; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+  });
+}
+
+el('btnCopyPick').addEventListener('click', ()=> copyText(el('pickOut').value));
+
+/** ====== 3) Armado ====== **/
+function buildMovLines() {
+  const lines = [];
+  // components negative (from required)
+  for (const r of Array.from(state.required.values()).sort((a,b)=>a.code-b.code)) {
+    lines.push({
+      code:r.code,
+      desc:r.desc||'',
+      qty: -Math.abs(r.qty||0),
+      tipo:'COMP'
+    });
+  }
+  // sets positive (from setQty)
+  const setMap = new Map(SETS_DATA.map(s=>[s.code, s.name]));
+  const sel = Array.from(state.setQty.entries()).filter(([_,q])=>(q||0)>0).sort((a,b)=>a[0]-b[0]);
+  for (const [code,q] of sel) {
+    lines.push({
+      code:code,
+      desc:setMap.get(code)||'',
+      qty: Math.abs(q||0),
+      tipo:'SET'
+    });
+  }
+  return lines;
+}
+
+function renderMov() {
+  const tbody = el('movTable').querySelector('tbody');
+  tbody.innerHTML='';
+  const lines = buildMovLines();
+  for (const l of lines) {
+    const tr=document.createElement('tr');
+    tr.innerHTML = `
+      <td class="code">${l.code}</td>
+      <td class="desc">${escapeHtml(l.desc||'')}</td>
+      <td class="qty">${l.qty}</td>
+      <td class="desc">${l.tipo}</td>
+    `;
+    tbody.appendChild(tr);
+  }
+  el('movLines').textContent = fmt(lines.length);
+  // KPIs
+  const compCount = lines.filter(x=>x.tipo==='COMP').length;
+  const setCount  = lines.filter(x=>x.tipo==='SET').length;
+  const net = lines.reduce((a,x)=>a+(x.qty||0),0);
+  el('kpiMovComp').textContent = fmt(compCount);
+  el('kpiMovSets').textContent = fmt(setCount);
+  el('kpiMovTotal').textContent = fmt(lines.length);
+  el('kpiMovNet').textContent = fmt(net);
+}
+
+function copyMov() {
+  const lines = buildMovLines().map(l=>[l.code, l.desc, l.qty].join('\t')).join('\n');
+  copyText(lines);
+}
+
+el('btnCopyMov').addEventListener('click', copyMov);
+
+// ===== Export Excel (XML Spreadsheet 2003 - offline friendly) =====
+function xmlEsc(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+                        .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function xmlCell(value, type='String', style='sCell', mergeAcross=0) {
+  const ma = mergeAcross ? ` ss:MergeAcross="${mergeAcross}"` : '';
+  const v = (value === null || value === undefined) ? '' : value;
+  return `<Cell ss:StyleID="${style}"${ma}><Data ss:Type="${type}">${xmlEsc(v)}</Data></Cell>`;
+}
+function xmlRow(cells) { return `<Row>${cells.join('')}</Row>`; }
+
+function buildPivotByLoc(lines) {
+  const groups = new Map(); // loc -> {sum, items: Map(code->{qty,desc})}
+  for (const l of lines) {
+    const locKey = l.isPL ? 'PL' : (l.loc || '(Sin ubicación)');
+    const code = l.code;
+    const qty = Number(l.qty||0) || 0;
+    if (!groups.has(locKey)) groups.set(locKey, { sum: 0, items: new Map() });
+    const g = groups.get(locKey);
+    g.sum += qty;
+    if (!g.items.has(code)) g.items.set(code, { qty: 0, desc: l.desc || '' });
+    g.items.get(code).qty += qty;
+  }
+  const keys = Array.from(groups.keys()).sort((a,b)=>{
+    if (a==='PL' && b!=='PL') return 1;
+    if (b==='PL' && a!=='PL') return -1;
+    return String(a).localeCompare(String(b), 'es', {numeric:true, sensitivity:'base'});
+  });
+  return { groups, keys };
+}
+
+function buildWorkbookXML() {
+  const includePL = el('chkIncludePL')?.checked ?? true;
+  const lines = (state.lines || []).filter(l => includePL ? true : !l.isPL);
+
+  const mov = buildMovLines();
+  const setsOnly = mov.filter(x => x.tipo === 'SET');
+  const compsOnly = mov.filter(x => x.tipo === 'COMP');
+  const pivot = buildPivotByLoc(lines);
+
+  const now = new Date();
+  const dateStr = now.toISOString().slice(0,10);
+  const timeStr = now.toTimeString().slice(0,5);
+  const title = 'Hoja de Trabajo - Armado de Sets (NovAge)';
+
+  const styles = `
+    <Styles>
+      <Style ss:ID="Default" ss:Name="Normal">
+        <Alignment ss:Vertical="Center"/>
+        <Font ss:FontName="Calibri" ss:Size="11" ss:Color="#1b1b1b"/>
+      </Style>
+
+      <Style ss:ID="sTitle">
+        <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+        <Font ss:Bold="1" ss:Size="14" ss:Color="#0b2b3a"/>
+        <Interior ss:Color="#dff3f3" ss:Pattern="Solid"/>
+      </Style>
+
+      <Style ss:ID="sSub">
+        <Font ss:Italic="1" ss:Color="#3c5666"/>
+      </Style>
+
+      <Style ss:ID="sHeader">
+        <Font ss:Bold="1" ss:Color="#0b2b3a"/>
+        <Interior ss:Color="#cfe8ff" ss:Pattern="Solid"/>
+        <Borders>
+          <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#7aa9c7"/>
+          <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#7aa9c7"/>
+          <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#7aa9c7"/>
+          <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#7aa9c7"/>
+        </Borders>
+      </Style>
+
+      <Style ss:ID="sCell">
+        <Borders>
+          <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#d6dde3"/>
+          <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#d6dde3"/>
+          <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#d6dde3"/>
+          <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#d6dde3"/>
+        </Borders>
+      </Style>
+
+      <Style ss:ID="sNum">
+        <Alignment ss:Horizontal="Right"/>
+        <NumberFormat ss:Format="0"/>
+        <Borders>
+          <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#d6dde3"/>
+          <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#d6dde3"/>
+          <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#d6dde3"/>
+          <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#d6dde3"/>
+        </Borders>
+      </Style>
+
+      <Style ss:ID="sGroup">
+        <Font ss:Bold="1" ss:Color="#0b2b3a"/>
+        <Interior ss:Color="#eaf6ea" ss:Pattern="Solid"/>
+        <Borders>
+          <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#a9cfa9"/>
+          <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#a9cfa9"/>
+          <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#a9cfa9"/>
+          <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#a9cfa9"/>
+        </Borders>
+      </Style>
+
+      <Style ss:ID="sIndent">
+        <Alignment ss:Indent="1"/>
+        <Borders>
+          <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#d6dde3"/>
+          <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#d6dde3"/>
+          <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#d6dde3"/>
+          <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#d6dde3"/>
+        </Borders>
+      </Style>
+    </Styles>
+  `;
+
+  // Sheet 1 rows
+  const s1 = [];
+  s1.push(xmlRow([xmlCell(title,'String','sTitle',6)]));
+  s1.push(xmlRow([xmlCell(`Generado: ${dateStr} ${timeStr}`, 'String', 'sSub', 6)]));
+  s1.push('<Row/>');
+
+  s1.push(xmlRow([xmlCell('Armados a realizar','String','sHeader',6)]));
+  s1.push(xmlRow([xmlCell('Código Set','String','sHeader'), xmlCell('Descripción','String','sHeader'), xmlCell('QTY','String','sHeader')]));
+  if (!setsOnly.length) {
+    s1.push(xmlRow([xmlCell('—','String','sCell'), xmlCell('No hay sets seleccionados','String','sCell'), xmlCell('', 'String','sCell')]));
+  } else {
+    for (const s of setsOnly) s1.push(xmlRow([xmlCell(s.code,'Number','sCell'), xmlCell(s.desc,'String','sCell'), xmlCell(s.qty,'Number','sNum')]));
+  }
+  s1.push('<Row/>');
+
+  s1.push(xmlRow([xmlCell('Componentes requeridos (consolidado)','String','sHeader',6)]));
+  s1.push(xmlRow([xmlCell('Código','String','sHeader'), xmlCell('Descripción','String','sHeader'), xmlCell('QTY','String','sHeader')]));
+  if (!compsOnly.length) {
+    s1.push(xmlRow([xmlCell('—','String','sCell'), xmlCell('No hay componentes requeridos','String','sCell'), xmlCell('', 'String','sCell')]));
+  } else {
+    for (const c of compsOnly) s1.push(xmlRow([xmlCell(c.code,'Number','sCell'), xmlCell(c.desc,'String','sCell'), xmlCell(c.qty,'Number','sNum')]));
+  }
+  s1.push('<Row/>');
+
+  s1.push(xmlRow([xmlCell('Recopilación para picking','String','sHeader',6)]));
+  s1.push(xmlRow([
+    xmlCell('Código','String','sHeader'),
+    xmlCell('Descripción','String','sHeader'),
+    xmlCell('Ubicación','String','sHeader'),
+    xmlCell('Puesto(s)','String','sHeader'),
+    xmlCell('QTY','String','sHeader'),
+    xmlCell('PL (editable)','String','sHeader'),
+    xmlCell('Nota PL','String','sHeader')
+  ]));
+  if (!lines.length) {
+    s1.push(xmlRow([xmlCell('—','String','sCell'), xmlCell('Primero genera la recopilación (Paso 2)','String','sCell', 6)]));
+  } else {
+    for (const l of lines) {
+      const plText = l.isPL ? (l.plLoc || 'PL') : '';
+      const note = l.isPL ? (l.plComment || '') : '';
+      s1.push(xmlRow([
+        xmlCell(l.code,'Number','sCell'),
+        xmlCell(l.desc,'String','sCell'),
+        xmlCell(l.isPL ? 'PL' : (l.loc||''),'String','sCell'),
+        xmlCell(l.puesto||'','String','sCell'),
+        xmlCell(Number(l.qty||0),'Number','sNum'),
+        xmlCell(plText,'String','sCell'),
+        xmlCell(note,'String','sCell')
+      ]));
+    }
+  }
+
+  const sheet1 = `
+    <Worksheet ss:Name="Hoja_Trabajo">
+      <Table>
+        <Column ss:Width="90"/>
+        <Column ss:Width="360"/>
+        <Column ss:Width="120"/>
+        <Column ss:Width="140"/>
+        <Column ss:Width="60"/>
+        <Column ss:Width="120"/>
+        <Column ss:Width="220"/>
+        ${s1.join('')}
+      </Table>
+      <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+        <FreezePanes/>
+        <FrozenNoSplit/>
+        <SplitHorizontal>3</SplitHorizontal>
+        <TopRowBottomPane>3</TopRowBottomPane>
+        <ActivePane>2</ActivePane>
+      </WorksheetOptions>
+    </Worksheet>
+  `;
+
+  // Sheet 2 rows
+  const s2 = [];
+  s2.push(xmlRow([xmlCell('Tabla dinámica por posición (Ubicación → códigos)','String','sTitle',1)]));
+  s2.push(xmlRow([xmlCell(`Generado: ${dateStr} ${timeStr}`, 'String', 'sSub', 1)]));
+  s2.push('<Row/>');
+  s2.push(xmlRow([xmlCell('Etiquetas de fila','String','sHeader'), xmlCell('Suma de QTY','String','sHeader')]));
+
+  if (!lines.length) {
+    s2.push(xmlRow([xmlCell('—','String','sCell'), xmlCell('', 'String','sCell')]));
+  } else {
+    for (const k of pivot.keys) {
+      const g = pivot.groups.get(k);
+      s2.push(xmlRow([xmlCell(k,'String','sGroup'), xmlCell(g.sum,'Number','sGroup')]));
+      const items = Array.from(g.items.entries()).sort((a,b)=>Number(a[0])-Number(b[0]));
+      for (const [code, it] of items) {
+        s2.push(xmlRow([xmlCell(code,'Number','sIndent'), xmlCell(it.qty,'Number','sNum')]));
+      }
+    }
+  }
+
+  const sheet2 = `
+    <Worksheet ss:Name="Pivot_Posicion">
+      <Table>
+        <Column ss:Width="220"/>
+        <Column ss:Width="90"/>
+        ${s2.join('')}
+      </Table>
+      <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+        <FreezePanes/>
+        <FrozenNoSplit/>
+        <SplitHorizontal>4</SplitHorizontal>
+        <TopRowBottomPane>4</TopRowBottomPane>
+        <ActivePane>2</ActivePane>
+      </WorksheetOptions>
+    </Worksheet>
+  `;
+
+  // Sheet 3: detalle plano (para armar una tabla dinámica real en Excel en 2 clics)
+  const s3 = [];
+  s3.push(xmlRow([xmlCell('Detalle plano (base para tabla dinámica)','String','sTitle',4)]));
+  s3.push(xmlRow([xmlCell(`Generado: ${dateStr} ${timeStr}`, 'String', 'sSub', 4)]));
+  s3.push('<Row/>');
+  s3.push(xmlRow([
+    xmlCell('Ubicación','String','sHeader'),
+    xmlCell('Código','String','sHeader'),
+    xmlCell('Descripción','String','sHeader'),
+    xmlCell('QTY','String','sHeader'),
+    xmlCell('Puesto(s)','String','sHeader'),
+    xmlCell('PL (editable)','String','sHeader'),
+    xmlCell('Nota PL','String','sHeader')
+  ]));
+  if (!lines.length) {
+    s3.push(xmlRow([xmlCell('—','String','sCell', 6)]));
+  } else {
+    for (const l of lines) {
+      const plText = l.isPL ? (l.plLoc || 'PL') : '';
+      const note = l.isPL ? (l.plComment || '') : '';
+      s3.push(xmlRow([
+        xmlCell(l.isPL ? 'PL' : (l.loc||''),'String','sCell'),
+        xmlCell(l.code,'Number','sCell'),
+        xmlCell(l.desc,'String','sCell'),
+        xmlCell(Number(l.qty||0),'Number','sNum'),
+        xmlCell(l.puesto||'','String','sCell'),
+        xmlCell(plText,'String','sCell'),
+        xmlCell(note,'String','sCell')
+      ]));
+    }
+  }
+
+  const sheet3 = `
+    <Worksheet ss:Name="Detalle_Picking">
+      <Table>
+        <Column ss:Width="120"/>
+        <Column ss:Width="90"/>
+        <Column ss:Width="360"/>
+        <Column ss:Width="60"/>
+        <Column ss:Width="140"/>
+        <Column ss:Width="120"/>
+        <Column ss:Width="220"/>
+        ${s3.join('')}
+      </Table>
+      <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+        <FreezePanes/>
+        <FrozenNoSplit/>
+        <SplitHorizontal>4</SplitHorizontal>
+        <TopRowBottomPane>4</TopRowBottomPane>
+        <ActivePane>2</ActivePane>
+      </WorksheetOptions>
+    </Worksheet>
+  `;
+
+  const xml = `<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+  ${styles}
+  ${sheet1}
+  ${sheet2}
+  ${sheet3}
+</Workbook>`;
+  return { xml, dateStr, timeStr };
+}
+
+function exportXls() {
+  if (!state.lines || !state.lines.length) { toast('Primero genera la recopilación (Paso 2) para poder exportar.'); return; }
+  const { xml, dateStr, timeStr } = buildWorkbookXML();
+  const filename = `Hoja_Trabajo_Armados_${dateStr}_${timeStr.replace(':','')}.xls`;
+  const blob = new Blob([xml], {type:'application/vnd.ms-excel;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 1500);
+  toast('Excel generado ✅');
+}
+
+el('btnExportXls')?.addEventListener('click', exportXls);
+// ===== End Export =====
+
+/** Utils **/
+function escapeHtml(s) {
+  return String(s||'').replace(/[&<>"']/g, c=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+function escapeAttr(s) {
+  return escapeHtml(s).replace(/\n/g,' ').replace(/\t/g,' ');
+}
+
+
+/** ====== MAIN MODULE TABS ====== **/
+function setMainTab(name){
+  document.querySelectorAll('#mainTabs .tab').forEach(t=>t.classList.toggle('active', t.dataset.main===name));
+  el('module-novage').classList.toggle('hidden', name!=='novage');
+  el('module-otros').classList.toggle('hidden', name!=='otros');
+}
+el('mainTabs').addEventListener('click', (e)=>{
+  const t = e.target.closest('.tab[data-main]');
+  if (!t) return;
+  setMainTab(t.dataset.main);
+});
+
+/** ====== OTROS ARMADOS ====== **/
+const otherState = {
+  setCode:'',
+  setDesc:'',
+  setQty:0,
+  components:[],
+  required:new Map(),
+  stockByCode:new Map(),
+  lines:[]
+};
+
+function oSetTab(tab){
+  document.querySelectorAll('#oTabs .tab').forEach(t=>t.classList.toggle('active', t.dataset.otab===tab));
+  ['base','stock','pick','mov'].forEach(name=>{
+    el('o-tab-'+name).classList.toggle('hidden', name!==tab);
+  });
+  if (tab==='pick') { oRenderLines(); oBuildPickOut(); }
+  if (tab==='mov') oRenderMov();
+}
+el('oTabs').addEventListener('click', (e)=>{
+  const t = e.target.closest('.tab[data-otab]');
+  if (!t) return;
+  oSetTab(t.dataset.otab);
+});
+
+function oParseComponents(){
+  const qtyArm = Math.max(0, clampInt(el('oSetQty').value));
+  otherState.setCode = String(el('oSetCode').value||'').trim();
+  otherState.setDesc = String(el('oSetDesc').value||'').trim();
+  otherState.setQty = qtyArm;
+  otherState.components = [];
+  otherState.required.clear();
+
+  const raw = String(el('oCompPaste').value||'').replace(/\r/g,'').trim();
+  if (!raw) { oRenderCompTable(); oUpdateKPIs(); return; }
+
+  const lines = raw.split('\n').filter(Boolean);
+  for (const line of lines){
+    const row = String(line).trim();
+    if (!row) continue;
+    const cells = row.includes('\t') ? row.split('\t').map(x=>x.trim()) : row.split(/[;,]/).map(x=>x.trim());
+    if (!cells.length) continue;
+
+    let code = '';
+    let desc = '';
+    let per = 0;
+
+    if (cells.length >= 3){
+      code = cells[0];
+      desc = cells[1];
+      per = clampInt(cells[2]);
+    } else if (cells.length === 2){
+      const m = cells[0].match(/^(\d{4,9})\s+(.+)$/);
+      if (m){
+        code = m[1];
+        desc = m[2];
+      } else {
+        code = cells[0];
+        desc = '';
+      }
+      per = clampInt(cells[1]);
+    } else {
+      const m = row.match(/^(\d{4,9})\s+(.+?)\s+(-?\d+)$/);
+      if (m){
+        code = m[1];
+        desc = m[2];
+        per = clampInt(m[3]);
+      }
+    }
+
+    const codeNum = clampInt(code);
+    if (!codeNum || !per) continue;
+    const item = { code:codeNum, desc:desc||'', per:per, req: per * qtyArm };
+    otherState.components.push(item);
+    otherState.required.set(codeNum, { code:codeNum, desc:desc||'', qty:item.req });
+  }
+
+  oRenderCompTable();
+  oUpdateKPIs();
+  oRenderMov();
+  toast('Componentes procesados ✅');
+}
+
+function oRenderCompTable(){
+  const tbody = el('oCompTable').querySelector('tbody');
+  tbody.innerHTML = '';
+  for (const c of otherState.components.sort((a,b)=>a.code-b.code)){
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="code">${c.code}</td>
+      <td class="desc">${escapeHtml(c.desc||'')}</td>
+      <td class="qty small">${fmt(c.per)}</td>
+      <td class="qty small">${fmt(c.req)}</td>
+    `;
+    tbody.appendChild(tr);
+  }
+  el('oCompCount').textContent = fmt(otherState.components.length);
+}
+
+function parseStockFromText(rawText){
+  const raw = String(rawText || '').replace(/\r/g, '').trim();
+  if (!raw) return [];
+
+  const normalizeHeader = (s) => (s || '')
+    .toString()
+    .trim()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/\s+/g, ' ');
+  const tokenizeRow = (line)=>{
+    const raw = String(line||'').replace(/\u00a0/g,' ').replace(/\r/g,'');
+    if (!raw.trim()) return [];
+    const l = raw.trimEnd();
+    if (l.includes('\t')) return l.split('\t').map(c=>c.trim());
+    if (l.includes(';') && l.split(';').length >= 3) return l.split(';').map(c=>c.trim());
+    if (l.includes(',') && l.split(',').length >= 5) return l.split(',').map(c=>c.trim());
+    let parts = l.trim().split(/\s{2,}/).map(c=>c.trim());
+    if (parts.length <= 2) parts = l.trim().split(/\s+/).map(c=>c.trim());
+    return parts;
+  };
+  const parseQtySmart = (v) => {
+    if (v === null || v === undefined) return null;
+    let s = String(v).replace(/\u00A0/g, ' ').trim();
+    if (!s) return null;
+    s = s.replace(/[^\d.,-]/g, '');
+    if (!s) return null;
+    const hasDot = s.includes('.');
+    const hasComma = s.includes(',');
+    if (hasDot && hasComma) {
+      const lastDot = s.lastIndexOf('.');
+      const lastComma = s.lastIndexOf(',');
+      if (lastComma > lastDot) s = s.replace(/\./g, '').replace(/,/g, '.');
+      else s = s.replace(/,/g, '');
+    } else if (hasComma && !hasDot) {
+      if (/^-?\d{1,3}(,\d{3})+$/.test(s)) s = s.replace(/,/g, '');
+      else s = s.replace(/,/g, '.');
+    } else if (hasDot && !hasComma) {
+      if (/^-?\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, '');
+    }
+    const n = Number(s);
+    if (!Number.isFinite(n)) return null;
+    return n;
+  };
+
+  const lines = raw.split('\n').map(l => l.trimEnd()).filter(l => l.trim().length);
+  if (!lines.length) return [];
+
+  let header = null;
+  let startIdx = 0;
+  const isHeaderRow = (normCols)=>{
+    const hasLoc = normCols.some(h => h==='ubicacion' || h==='locacion' || h.includes('ubicacion') || h.includes('ubic') || h==='location' || h.includes('location'));
+    const hasQty = normCols.some(h => h.includes('quantity') || h.includes('qty') || h.includes('cantidad') || h.includes('cant'));
+    const hasCode = normCols.some(h => h==='variante' || h==='codigo' || h==='prod_code' || h==='sku' || h.includes('variante') || h.includes('codigo'));
+    const hasBodega = normCols.some(h => h.includes('bodega'));
+    return hasLoc && hasQty && (hasCode || hasBodega);
+  };
+
+  let headerRowIdx = -1;
+  let headerNorm = null;
+  for (let j=0; j<Math.min(lines.length, 15); j++){
+    const colsRaw = tokenizeRow(lines[j]);
+    if (colsRaw.length < 3) continue;
+    const normCols = colsRaw.map(normalizeHeader);
+    if (isHeaderRow(normCols)){
+      headerRowIdx = j;
+      headerNorm = normCols;
+      break;
+    }
+  }
+
+  if (headerRowIdx >= 0 && headerNorm){
+    header = { code: -1, loc: -1, qty: -1, zone: -1 };
+    headerNorm.forEach((h, idx)=>{
+      if (header.code < 0 && (h==='variante' || h==='codigo' || h==='prod_code' || h==='sku')) header.code = idx;
+      if (header.loc < 0 && (h==='ubicacion' || h==='locacion' || h==='location' || h.includes('ubic') || h.includes('loca'))) header.loc = idx;
+      if (header.qty < 0 && (h==='physical quantity' || h.includes('quantity') || h.includes('qty') || h==='cantidad' || h.includes('cant'))) header.qty = idx;
+      if (header.zone < 0 && (h==='zona' || h==='zone')) header.zone = idx;
+    });
+    startIdx = headerRowIdx + 1;
+  }
+
+  const normCell = (v)=> (v??'').toString()
+      .replace(/\u00a0/g,' ')
+      .replace(/[\u2010\u2011\u2012\u2013\u2212]/g,'-')
+      .replace(/\s*-\s*/g,'-')
+      .trim();
+
+  const rows = [];
+  for (let i = startIdx; i < lines.length; i++) {
+    const rawLine = (lines[i] || '').trim();
+    if (!rawLine) continue;
+    const cells = tokenizeRow(rawLine).map(normCell);
+    if (!cells.length) continue;
+
+    let code = null, loc = null, qty = null, zoneFound = '';
+
+    if (header) {
+      const cCode = cells[header.code] ?? '';
+      const cLoc  = cells[header.loc]  ?? '';
+      const cQty  = cells[header.qty]  ?? '';
+      const cZone = header.zone >= 0 ? (cells[header.zone] ?? '') : '';
+      zoneFound = String(cZone || '').trim();
+      const mCode = String(cCode || '').match(/(\d{4,9})/);
+      if (mCode) code = mCode[1];
+      const mLoc = String(cLoc || '').match(/(\d{2}-\d{2}-\d{3}-\d{2})/);
+      if (mLoc) loc = mLoc[1];
+      if (!loc) {
+        for (const sp of SPECIAL_PUESTOS) {
+          if (String(cLoc).includes(sp) || rawLine.includes(sp)) { loc = sp; break; }
+        }
+      }
+      qty = parseQtySmart(cQty);
+    }
+
+    if (!Number.isFinite(qty)) qty = parseQtySmart(cells[cells.length - 1]);
+    if (!Number.isFinite(qty)) {
+      const mLast = rawLine.replace(/,/g, '').match(/(-?\d+(?:\.\d+)?)\s*$/);
+      if (mLast) qty = Number(mLast[1]);
+    }
+    if (!Number.isFinite(qty) || qty === 0) continue;
+
+    if (!code) {
+      if (cells.length >= 2 && /^\d{4,9}$/.test(cells[1])) code = cells[1];
+      else {
+        for (const c of cells) {
+          const m = String(c).match(/(^|[^\d])(\d{4,9})(?!\d)/);
+          if (m) { code = m[2]; break; }
+        }
+      }
+    }
+    if (!code) continue;
+
+    if (!loc) {
+      for (const c of cells) {
+        const m = String(c).match(/(\d{2}-\d{2}-\d{3}-\d{2})/);
+        if (m) { loc = m[1]; break; }
+      }
+    }
+    if (!loc) {
+      for (const sp of SPECIAL_PUESTOS) {
+        if (rawLine.includes(sp)) { loc = sp; break; }
+      }
+    }
+    if (!loc) continue;
+
+    if (!zoneFound) {
+      for (const p of cells) {
+        if (/^bulk$/i.test(p)) { zoneFound = 'Bulk'; break; }
+        if (/^pl$/i.test(p)) { zoneFound = 'PL'; break; }
+      }
+    }
+
+    const isNumericLoc = /^\d{2}-\d{2}-\d{3}-\d{2}$/.test(loc);
+    let seg = '', level = '';
+    if (isNumericLoc) {
+      const partsLoc = loc.split('-');
+      seg = partsLoc[2] || '';
+      level = partsLoc[3] || '';
+    }
+
+    let puestoFound = 'Bulk';
+    if (!isNumericLoc) {
+      if (SPECIAL_PUESTOS.has(loc)) puestoFound = loc;
+      else if (loc.includes('Armados_') || loc === 'Armados_CW') puestoFound = 'Armados_CW';
+      else if (loc.includes('Aereos_') || loc === 'Aereos_CW') puestoFound = 'Aereos_CW';
+      else if (loc.includes('Rework_') || loc === 'Rework_CW') puestoFound = 'Rework_CW';
+      else if (loc.includes('Donaciones')) puestoFound = 'Donaciones';
+      else if (loc.includes('Destruccion')) puestoFound = 'Destruccion';
+      else if (loc.includes('Compra Local')) puestoFound = 'Compra Local';
+      else puestoFound = loc;
+    } else if (zoneFound && /^pl$/i.test(zoneFound)) {
+      puestoFound = 'PL';
+    }
+
+    const specialLoc = (!isNumericLoc) || SPECIAL_PUESTOS.has(loc);
+    const specialPuesto = !!puestoFound && puestoFound !== 'Bulk' && puestoFound !== 'Armados_CW';
+
+    rows.push({
+      code: Number(code),
+      loc,
+      puesto: puestoFound,
+      qty: Math.round(qty),
+      seg,
+      level,
+      specialLoc,
+      specialPuesto
+    });
+  }
+  return rows;
+}
+
+function oLoadStock(){
+  const rows = parseStockFromText(el('oStockPaste').value || '');
+  otherState.stockByCode.clear();
+  for (const r of rows){
+    if (!otherState.stockByCode.has(r.code)) otherState.stockByCode.set(r.code, []);
+    otherState.stockByCode.get(r.code).push(r);
+  }
+  for (const arr of otherState.stockByCode.values()){
+    arr.sort((a,b)=>{
+      const aCat = (a.specialLoc?2:(a.specialPuesto?1:0));
+      const bCat = (b.specialLoc?2:(b.specialPuesto?1:0));
+      if (aCat!==bCat) return aCat-bCat;
+      if (a.level!==b.level) return a.level-b.level;
+      if (a.seg!==b.seg) return a.seg-b.seg;
+      return 0;
+    });
+  }
+  el('oStockValid').textContent = fmt(rows.length);
+  oUpdateKPIs();
+  toast('Stock cargado ✅');
+}
+
+function oUpdateKPIs(){
+  el('oKpiSetCode').textContent = otherState.setCode || '—';
+  el('oKpiSetQty').textContent = fmt(otherState.setQty);
+  el('oKpiComp').textContent = fmt(otherState.components.length);
+  el('oKpiLines').textContent = fmt(otherState.lines.length);
+  let stockRows = 0;
+  for (const arr of otherState.stockByCode.values()) stockRows += arr.length;
+  el('oKpiStockRows').textContent = fmt(stockRows);
+  el('oKpiStockCodes').textContent = fmt(otherState.stockByCode.size);
+}
+
+function oAssignBulk(){
+  otherState.lines = [];
+  for (const r of Array.from(otherState.required.values()).sort((a,b)=>a.code-b.code)){
+    let remaining = r.qty;
+    const stock = (otherState.stockByCode.get(r.code) || []).map(x=>({...x}));
+    for (const s of stock){
+      if (remaining<=0) break;
+      const take = Math.min(s.qty, remaining);
+      if (take<=0) continue;
+      remaining -= take;
+      otherState.lines.push({
+        code:r.code,
+        desc:r.desc||'',
+        loc:s.loc,
+        puesto:'Armados_CW',
+        qty:take,
+        seg:s.seg,
+        level:s.level,
+        isPL:false,
+        plLoc:'',
+        plComment:''
+      });
+    }
+    if (remaining>0){
+      otherState.lines.push({
+        code:r.code,
+        desc:r.desc||'',
+        loc:'',
+        puesto:'Armados_CW',
+        qty:remaining,
+        seg:9999,
+        level:99,
+        isPL:true,
+        plLoc:'',
+        plComment:''
+      });
+    }
+  }
+  otherState.lines.sort((a,b)=>{
+    const aPL=a.isPL?1:0, bPL=b.isPL?1:0;
+    if (aPL!==bPL) return aPL-bPL;
+    if (a.seg!==b.seg) return a.seg-b.seg;
+    if (a.level!==b.level) return a.level-b.level;
+    return a.code-b.code;
+  });
+  oRenderLines();
+  oBuildPickOut();
+  oRenderMov();
+  oUpdateKPIs();
+  toast('Recopilación generada ✅');
+}
+
+function oRenderLines(){
+  const tbody = el('oLinesTable').querySelector('tbody');
+  tbody.innerHTML = '';
+  const includePL = el('oChkIncludePL').checked;
+  const visible = otherState.lines.filter(l=> includePL ? true : !l.isPL);
+
+  for (let i=0;i<visible.length;i++){
+    const l = visible[i];
+    const tr = document.createElement('tr');
+    const codeCell = l.isPL
+      ? `<div class="code">${l.code} <span class="warn">PL</span></div>`
+      : `<div class="code">${l.code}</div>`;
+    const locCell = l.isPL ? `<span class="muted">—</span>` : `<span class="desc">${escapeHtml(l.loc||'')}</span>`;
+    const plCell = l.isPL
+      ? `<div class="plWrap">
+           <input class="input" style="width:100%" placeholder="Ubicación PL..." data-opl="loc" data-i="${i}" value="${escapeAttr(l.plLoc||'')}"/>
+           <input class="input" style="width:100%" placeholder="Comentario..." data-opl="cmt" data-i="${i}" value="${escapeAttr(l.plComment||'')}"/>
+         </div>`
+      : `<span class="muted">—</span>`;
+    tr.innerHTML = `
+      <td>${codeCell}</td>
+      <td>${locCell}</td>
+      <td class="desc">${escapeHtml(l.puesto||'')}</td>
+      <td class="qty small">${fmt(l.qty)}</td>
+      <td>${plCell}</td>
+    `;
+    tbody.appendChild(tr);
+  }
+
+  tbody.querySelectorAll('input[data-opl]').forEach(inp=>{
+    inp.addEventListener('input', ()=>{
+      const rowIndex = parseInt(inp.dataset.i,10);
+      const key = inp.dataset.opl;
+      const includePL = el('oChkIncludePL').checked;
+      const visible = otherState.lines.filter(l=> includePL ? true : !l.isPL);
+      const line = visible[rowIndex];
+      if (!line || !line.isPL) return;
+      if (key==='loc') line.plLoc = inp.value.trim();
+      if (key==='cmt') line.plComment = inp.value.trim();
+      oBuildPickOut();
+    });
+  });
+}
+
+function oBuildPickOut(){
+  const includePL = el('oChkIncludePL').checked;
+  const visible = otherState.lines.filter(l=> includePL ? true : !l.isPL);
+  el('oPickOut').value = visible.map(l=>{
+    const loc = l.isPL ? (l.plLoc||'') : (l.loc||'');
+    return [l.code, loc, l.puesto, l.qty].join('\t');
+  }).join('\n');
+  el('oKpiLines').textContent = fmt(visible.length);
+}
+
+function oBuildMovLines(){
+  const lines = [];
+  for (const r of Array.from(otherState.required.values()).sort((a,b)=>a.code-b.code)){
+    lines.push({code:r.code, desc:r.desc||'', qty:-Math.abs(r.qty||0), tipo:'COMP'});
+  }
+  if (otherState.setCode && otherState.setQty>0){
+    lines.push({
+      code: clampInt(otherState.setCode) || otherState.setCode,
+      desc: otherState.setDesc || '',
+      qty: Math.abs(otherState.setQty||0),
+      tipo:'SET'
+    });
+  }
+  return lines;
+}
+
+function oRenderMov(){
+  const tbody = el('oMovTable').querySelector('tbody');
+  tbody.innerHTML = '';
+  const lines = oBuildMovLines();
+  for (const l of lines){
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="code">${escapeHtml(l.code)}</td>
+      <td class="desc">${escapeHtml(l.desc||'')}</td>
+      <td class="qty">${l.qty}</td>
+      <td class="desc">${l.tipo}</td>
+    `;
+    tbody.appendChild(tr);
+  }
+  el('oMovLines').textContent = fmt(lines.length);
+  el('oKpiMovComp').textContent = fmt(lines.filter(x=>x.tipo==='COMP').length);
+  el('oKpiMovSet').textContent = fmt(lines.filter(x=>x.tipo==='SET').length);
+  el('oKpiMovTotal').textContent = fmt(lines.length);
+  el('oKpiMovNet').textContent = fmt(lines.reduce((a,x)=>a+(Number(x.qty)||0),0));
+}
+
+function oCopyMov(){
+  const txt = oBuildMovLines().map(l=>[l.code, l.desc, l.qty].join('\t')).join('\n');
+  copyText(txt);
+}
+
+function oBuildWorkbookXML(){
+  const movLines = oBuildMovLines();
+  const pickLines = otherState.lines;
+  const now = new Date();
+  const pad = n=>String(n).padStart(2,'0');
+  const dateStr = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+  const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+
+  const styles = `
+    <Styles>
+      <Style ss:ID="sTitle"><Font ss:Bold="1" ss:Size="14"/><Interior ss:Color="#dff3f0" ss:Pattern="Solid"/></Style>
+      <Style ss:ID="sSub"><Font ss:Italic="1" ss:Color="#4a6b66"/></Style>
+      <Style ss:ID="sHeader"><Font ss:Bold="1" ss:Color="#ffffff"/><Interior ss:Color="#0b7469" ss:Pattern="Solid"/></Style>
+      <Style ss:ID="sCell"><Borders>
+          <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#d6dde3"/>
+          <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#d6dde3"/>
+          <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#d6dde3"/>
+          <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#d6dde3"/>
+      </Borders></Style>
+      <Style ss:ID="sNum"><Alignment ss:Horizontal="Right"/><NumberFormat ss:Format="0"/><Borders>
+          <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#d6dde3"/>
+          <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#d6dde3"/>
+          <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#d6dde3"/>
+          <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#d6dde3"/>
+      </Borders></Style>
+    </Styles>
+  `;
+
+  const s1 = [];
+  s1.push(xmlRow([xmlCell('Otros armados - hoja de trabajo','String','sTitle',5)]));
+  s1.push(xmlRow([xmlCell(`Generado: ${dateStr} ${timeStr}`,'String','sSub',5)]));
+  s1.push(xmlRow([xmlCell('Código armado','String','sHeader'), xmlCell('Descripción','String','sHeader'), xmlCell('Cantidad','String','sHeader')]));
+  s1.push(xmlRow([xmlCell(otherState.setCode || '','String','sCell'), xmlCell(otherState.setDesc || '','String','sCell'), xmlCell(otherState.setQty || 0,'Number','sNum')]));
+  s1.push('<Row/>');
+  s1.push(xmlRow([xmlCell('Recopilación','String','sHeader',5)]));
+  s1.push(xmlRow([
+    xmlCell('Código','String','sHeader'),
+    xmlCell('Descripción','String','sHeader'),
+    xmlCell('Ubicación','String','sHeader'),
+    xmlCell('Puesto(s)','String','sHeader'),
+    xmlCell('QTY','String','sHeader'),
+    xmlCell('PL','String','sHeader')
+  ]));
+  if (!pickLines.length) s1.push(xmlRow([xmlCell('—','String','sCell',5)]));
+  else for (const l of pickLines){
+    s1.push(xmlRow([
+      xmlCell(l.code,'Number','sCell'),
+      xmlCell(l.desc || '','String','sCell'),
+      xmlCell(l.isPL ? (l.plLoc || 'PL') : (l.loc || ''),'String','sCell'),
+      xmlCell(l.puesto || '','String','sCell'),
+      xmlCell(l.qty || 0,'Number','sNum'),
+      xmlCell(l.isPL ? (l.plComment || '') : '','String','sCell')
+    ]));
+  }
+
+  const s2 = [];
+  s2.push(xmlRow([xmlCell('Movimiento','String','sTitle',3)]));
+  s2.push(xmlRow([xmlCell(`Generado: ${dateStr} ${timeStr}`,'String','sSub',3)]));
+  s2.push(xmlRow([xmlCell('Código','String','sHeader'), xmlCell('Descripción','String','sHeader'), xmlCell('QTY','String','sHeader'), xmlCell('Tipo','String','sHeader')]));
+  if (!movLines.length) s2.push(xmlRow([xmlCell('—','String','sCell',3)]));
+  else for (const l of movLines){
+    s2.push(xmlRow([
+      xmlCell(l.code,'String','sCell'),
+      xmlCell(l.desc || '','String','sCell'),
+      xmlCell(l.qty || 0,'Number','sNum'),
+      xmlCell(l.tipo,'String','sCell')
+    ]));
+  }
+
+  return `<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ ${styles}
+ <Worksheet ss:Name="Hoja_Trabajo"><Table>
+   <Column ss:Width="100"/><Column ss:Width="300"/><Column ss:Width="120"/><Column ss:Width="120"/><Column ss:Width="70"/><Column ss:Width="160"/>
+   ${s1.join('')}
+ </Table></Worksheet>
+ <Worksheet ss:Name="Movimiento"><Table>
+   <Column ss:Width="100"/><Column ss:Width="320"/><Column ss:Width="80"/><Column ss:Width="80"/>
+   ${s2.join('')}
+ </Table></Worksheet>
+</Workbook>`;
+}
+
+function oExportXls(){
+  const xml = oBuildWorkbookXML();
+  const now = new Date();
+  const pad = n=>String(n).padStart(2,'0');
+  const file = `Otros_Armados_${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}.xls`;
+  const blob = new Blob([xml], {type:'application/vnd.ms-excel;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = file;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 1500);
+  toast('Excel generado ✅');
+}
+
+el('oBtnBuildReq').addEventListener('click', oParseComponents);
+el('oBtnLoadStock').addEventListener('click', oLoadStock);
+el('oBtnGeneratePick').addEventListener('click', oAssignBulk);
+el('oBtnCopyPick').addEventListener('click', ()=>copyText(el('oPickOut').value));
+el('oBtnCopyMov').addEventListener('click', oCopyMov);
+el('oBtnExportXls').addEventListener('click', oExportXls);
+el('oChkIncludePL').addEventListener('change', ()=>{ oRenderLines(); oBuildPickOut(); });
+
+el('oBtnClearBase').addEventListener('click', ()=>{
+  el('oSetCode').value = '';
+  el('oSetDesc').value = '';
+  el('oSetQty').value = '0';
+  el('oCompPaste').value = '';
+  otherState.setCode=''; otherState.setDesc=''; otherState.setQty=0; otherState.components=[]; otherState.required.clear(); otherState.lines=[];
+  oRenderCompTable(); oRenderLines(); oBuildPickOut(); oRenderMov(); oUpdateKPIs();
+});
+el('oBtnClearStock').addEventListener('click', ()=>{
+  el('oStockPaste').value='';
+  otherState.stockByCode.clear();
+  el('oStockValid').textContent = '0';
+  oUpdateKPIs();
+});
+
+let _oStockAutoTimer = null;
+el('oStockPaste').addEventListener('input', ()=>{
+  if (_oStockAutoTimer) clearTimeout(_oStockAutoTimer);
+  _oStockAutoTimer = setTimeout(()=>{ try { oLoadStock(); } catch(e){} }, 250);
+});
+
+/** INIT OTROS **/
+oRenderCompTable();
+oRenderLines();
+oBuildPickOut();
+oRenderMov();
+oUpdateKPIs();
+
+
+/** INIT **/
+buildSetsTable();
+updateBaseKPIs();
+renderRequired();
+renderLines();
+renderMov();
+</script>
+</body>
+</html>
